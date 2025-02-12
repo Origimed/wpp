@@ -4,7 +4,7 @@ import hmac
 import hashlib
 from flask import Flask, request, jsonify, abort
 from dotenv import load_dotenv  
-from modules import enviar_mensaje, registrar_usuario, verificar_usuario_bd, mensaje_opcion, verificar_status, actualizar_status,agregar_mensaje
+from modules import enviar_mensaje, registrar_usuario, verificar_usuario_bd, mensaje_opcion, verificar_status, actualizar_status,agregar_mensaje, enviar_mensaje_template
 import mysql.connector
 
 load_dotenv()
@@ -74,6 +74,8 @@ def handle_webhook():
     verify_signature(request)
     data = request.json
     logging.info(f"Mensaje recibido {data}")
+    enviar_mensaje_template(573046692933, "Alejandro", "Laura", "2022-12-12", "13:00 PM")
+
     try:
         # Verificar si el campo 'messages' existe en el JSON
         if 'messages' in data['entry'][0]['changes'][0]['value']:
