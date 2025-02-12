@@ -152,9 +152,9 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
             "to": phone_number,
             "type": "template",
             "template": {
-                "name": "recordatorio",
+                "name": "recordatorio",  # Asegúrate de que este nombre coincida exactamente con el nombre de tu plantilla
                 "language": {
-                    "code": "es"
+                    "code": "es_CO"  # Asegúrate de que este código coincida con el idioma y la localización de tu plantilla
                 },
                 "components": [
                     {
@@ -162,18 +162,22 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
                         "parameters": [
                             {
                                 "type": "text",
+                                "parameter_name": "nombre",
                                 "text": nombre
                             },
                             {
-                                "type": "text", 
+                                "type": "text",
+                                "parameter_name": "nombre_profesional",
                                 "text": nombre_profesional
                             },
                             {
                                 "type": "text",
+                                "parameter_name": "fecha",
                                 "text": fecha
                             },
                             {
                                 "type": "text",
+                                "parameter_name": "hora",
                                 "text": hora
                             }
                         ]
@@ -192,14 +196,11 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
         
         if response.status_code == 200:
             logging.info(f"Mensaje template enviado con éxito a {phone_number}")
-            print("Mensaje template enviado con éxito:", response.json())
             return True
         else:
             logging.error(f"Error al enviar mensaje template: {response.text}")
-            print("Error al enviar mensaje template:", response.status_code, response.text)
             return False
 
     except Exception as e:
-        print("Error al enviar mensaje template:", str(e))
         logging.error(f"Error al enviar mensaje template: {str(e)}")
         return False
