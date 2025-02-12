@@ -74,7 +74,7 @@ def handle_webhook():
     verify_signature(request)
     data = request.json
     logging.info(f"Mensaje recibido {data}")
-    enviar_mensaje_template(573046692933, "Alejandro", "Laura", "2022-12-12", "13:00 PM")
+    
 
     try:
         # Verificar si el campo 'messages' existe en el JSON
@@ -150,4 +150,5 @@ def handle_webhook():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == "__main__":
+    enviar_mensaje_template(573046692933, "Alejandro", "Laura", "2022-12-12", "13:00 PM")
     app.run(debug=True, host="0.0.0.0", port=5000)
