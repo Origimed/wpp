@@ -152,7 +152,7 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
             "to": phone_number,
             "type": "template",
             "template": {
-                "name": "nombre_template",
+                "name": "recordatorio",
                 "language": {
                     "code": "es"
                 },
