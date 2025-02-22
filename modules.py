@@ -144,6 +144,17 @@ def actualizar_status(phone_number, nuevo_status):
     except Exception as e:
         logging.error(f"Error al actualizar el estado del usuario: {str(e)}")
 
+def verificar_citas_manana():
+    try:
+        response = supabase.table('citas').select('*').eq('fecha', '2022-12-01').execute()
+        return response.data
+    except Exception as e:
+        logging.error(f"Error al verificar las citas de mañana: {str(e)}")
+        return []
+
+
+
+
 def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hora):
     try:
         message_data = {
