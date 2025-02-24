@@ -85,7 +85,7 @@ def handle_webhook():
             if data['entry'][0]['changes'][0]['value']['messages'][0]['type'] == 'button':
                 payload = data["entry"][0]["changes"][0]["value"]["messages"][0]["button"]["payload"]
                 if payload == "Confirmo":
-                    modificar_confirmacion(phone_number)
+                    modificar_confirmacion(phone_number[2:])
                     print("La cita ha sido confirmada")
                     enviar_mensaje(phone_number, "¡Cita confirmada! 🎉")
 
