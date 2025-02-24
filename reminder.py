@@ -38,6 +38,7 @@ def obtener_detalles_cliente(client_id):
         logging.error(f"Error al obtener detalles del cliente: {str(e)}")
         return None
     
+
 def obtener_detalles_profesion(profesional_id):
     try:
         response = supabase.table('profesional').select('*').eq('id', profesional_id).execute()
@@ -49,17 +50,26 @@ def obtener_detalles_profesion(profesional_id):
     except Exception as e:
         logging.error(f"Error al obtener detalles del profesional: {str(e)}")
         return None
+    
 
+def modificar_confirmacion(phone_number):
+    try:
+        response = supabase.table('client').select('id').eq('telefono', phone_number).execute()
+        if response.data:
+            client_id = response.data[0]['id']
+            
+            citas_response = supabase.table('appointment').select('*').eq('client', client_id).execute()
+            
+            if citas_response.data:
+                update_response = supabase.table('appointment').update({'confirmed': True}).eq('client', client_id).execute()
+                if update_response.data:
+                    logging.info(f"Confirmación de la cita de {phone_number} actualizada")
+                else:
+                    logging.error(f"Error al actualizar la confirmación de la cita: {update_response}")
+            else:
+                logging.error(f"No se encontraron citas para el cliente con ID {client_id}")
+        else:
+            logging.error(f"No se encontró el cliente con el teléfono {phone_number}")
+    except Exception as e:
+        logging.error(f"Error al actualizar la confirmación de la cita: {str(e)}")
 
-
-if __name__ == "__main__":
-    citas = citas_de_manana() 
-    print("Citas para mañana:")
-    for c in citas:
-        cliente = obtener_detalles_cliente(c['client'])
-        profesional = obtener_detalles_profesion(c['profesional'])
-        nombre_profesional = profesional["nombre"]
-        telefono_cliente = cliente["telefono"]
-        nombre_cliente = cliente["nombre"]
-        print(telefono_cliente)
-        enviar_mensaje_template(str(telefono_cliente), str(nombre_cliente), str(nombre_profesional), str(c['date']), str(c['start_time']))

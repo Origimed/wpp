@@ -153,8 +153,6 @@ def verificar_citas_manana():
         return []
 
 
-
-
 def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hora):
     try:
         message_data = {
@@ -163,9 +161,9 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
             "to": phone_number,
             "type": "template",
             "template": {
-                "name": "recordatorio",  # Asegúrate de que este nombre coincida exactamente con el nombre de tu plantilla
+                "name": "recordatorio",  
                 "language": {
-                    "code": "es_CO"  # Asegúrate de que este código coincida con el idioma y la localización de tu plantilla
+                    "code": "es_CO"  
                 },
                 "components": [
                     {
@@ -215,3 +213,5 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
     except Exception as e:
         logging.error(f"Error al enviar mensaje template: {str(e)}")
         return False
+    
+
