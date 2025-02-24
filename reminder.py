@@ -73,3 +73,18 @@ def modificar_confirmacion(phone_number):
     except Exception as e:
         logging.error(f"Error al actualizar la confirmación de la cita: {str(e)}")
 
+
+
+if __name__ == "__main__":
+    citas = citas_de_manana() 
+
+    print("Citas para mañana:")
+    
+    for c in citas:
+        cliente = obtener_detalles_cliente(c['client'])
+        profesional = obtener_detalles_profesion(c['profesional'])
+        nombre_profesional = profesional["nombre"]
+        telefono_cliente = cliente["telefono"]
+        nombre_cliente = cliente["nombre"]
+        print(telefono_cliente)
+        enviar_mensaje_template(str(telefono_cliente), str(nombre_cliente), str(nombre_profesional), str(c['date']), str(c['start_time']))
