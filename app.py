@@ -16,6 +16,8 @@ from modules import (
     enviar_mensaje_template,
 )
 from reminder import modificar_confirmacion
+from fastapi.middleware.cors import CORSMiddleware
+
 
 load_dotenv()
 
@@ -27,6 +29,7 @@ APP_SECRET = os.getenv("APP_SECRET")
 
 
 
+
 logging.basicConfig(
     filename="webhook_logs.log",
     level=logging.INFO,
@@ -34,6 +37,20 @@ logging.basicConfig(
 )
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",  # Origen de tu servidor de desarrollo Vite
+    "https://afrodita-ips.vercel.app",  # Otros orígenes permitidos
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def verify_signature(req: Request, body: bytes):
     signature = req.headers.get("X-Hub-Signature-256")
@@ -90,6 +107,3 @@ async def handle_webhook(request: Request):
         logging.error(f"Error al manejar el webhook: {str(e)}")
         return {"status": "error", "message": str(e)}
 
-@app.on_event("startup")
-async def startup_event():
-    enviar_mensaje_template(573046692933, "Alejandro", "Laura", "2022-12-12", "13:00 PM")
