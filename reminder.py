@@ -52,14 +52,29 @@ def obtener_detalles_profesion(profesional_id):
         return None
     
 
-def modificar_confirmacion(phone_number):
+
+
+
+def obtener_datos_cliente(phone_number):
     try:
         response = supabase.table('client').select('id').eq('telefono', phone_number).execute()
         if response.data:
-            client_id = response.data[0]['id']
-            
+            return response.data[0]['id']
+        else:
+            logging.error(f"No se encontró el cliente con el teléfono {phone_number}")
+            return None
+    except Exception as e:
+        logging.error(f"Error al obtener datos del cliente: {str(e)}")
+        return None
+
+
+
+
+def modificar_confirmacion(phone_number):
+    try:
+        client_id = obtener_datos_cliente(phone_number)
+        if client_id:
             citas_response = supabase.table('appointment').select('*').eq('client', client_id).execute()
-            
             if citas_response.data:
                 update_response = supabase.table('appointment').update({'confirmed': True}).eq('client', client_id).execute()
                 if update_response.data:
@@ -68,12 +83,8 @@ def modificar_confirmacion(phone_number):
                     logging.error(f"Error al actualizar la confirmación de la cita: {update_response}")
             else:
                 logging.error(f"No se encontraron citas para el cliente con ID {client_id}")
-        else:
-            logging.error(f"No se encontró el cliente con el teléfono {phone_number}")
     except Exception as e:
         logging.error(f"Error al actualizar la confirmación de la cita: {str(e)}")
-
-
 
 if __name__ == "__main__":
     citas = citas_de_manana() 
@@ -87,4 +98,4 @@ if __name__ == "__main__":
         telefono_cliente = cliente["telefono"]
         nombre_cliente = cliente["nombre"]
         print(telefono_cliente)
-        enviar_mensaje_template(str(telefono_cliente), str(nombre_cliente), str(nombre_profesional), str(c['date']), str(c['start_time']))
+        enviar_mensaje_template(str("recordatorio"),str(telefono_cliente), str(nombre_cliente), str(nombre_profesional), str(c['date']), str(c['start_time']))

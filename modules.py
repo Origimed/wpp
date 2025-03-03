@@ -153,7 +153,7 @@ def verificar_citas_manana():
         return []
 
 
-def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hora):
+def enviar_mensaje_template(nombre_template,phone_number, nombre, nombre_profesional, fecha, hora):
     try:
         message_data = {
             "messaging_product": "whatsapp",
@@ -161,7 +161,7 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
             "to": phone_number,
             "type": "template",
             "template": {
-                "name": "recordatorio",  
+                "name": nombre_template,  
                 "language": {
                     "code": "es_CO"  
                 },
@@ -213,5 +213,31 @@ def enviar_mensaje_template(phone_number, nombre, nombre_profesional, fecha, hor
     except Exception as e:
         logging.error(f"Error al enviar mensaje template: {str(e)}")
         return False
+    
+def obtener_datos_cliente(phone_number):
+    try:
+        response = supabase.table('client').select('id').eq('telefono', phone_number).execute()
+        if response.data:
+            return response.data[0]['id']
+        else:
+            logging.error(f"No se encontró el cliente con el teléfono {phone_number}")
+            return None
+    except Exception as e:
+        logging.error(f"Error al obtener datos del cliente: {str(e)}")
+        return None
+    
+
+
+def obtener_detalles_profesional(profesional_id):
+    try:
+        response = supabase.table('profesional').select('*').eq('id', profesional_id).execute()
+        
+        if response.data:
+            return response.data[0] 
+        else:
+            return None
+    except Exception as e:
+        logging.error(f"Error al obtener detalles del profesional: {str(e)}")
+        return None
     
 
