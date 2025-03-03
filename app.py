@@ -169,8 +169,8 @@ async def cita(request: Request):
                 data = await request.json()
                 logging.info(f"Mensaje recibido cancelar {data}")
 
-                id_cliente = data["client"]
-                id_profesional = data["profesional"]
+                id_cliente = data["client"]["id"]
+                id_profesional = data["profesional"]["id"]
                 data_cliente = obtener_detalles_cliente(id_cliente)
                 data_profesional = obtener_detalles_profesional(id_profesional)
                 phone_number = data_cliente["telefono"]
