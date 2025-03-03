@@ -241,3 +241,16 @@ def obtener_detalles_profesional(profesional_id):
         return None
     
 
+def obtener_detalles_cliente(client_id):
+    try:
+        response = supabase.table('client').select('*').eq('id', client_id).execute()
+        
+        if response.data:
+            return response.data[0]  
+        else:
+            return None
+    except Exception as e:
+        logging.error(f"Error al obtener detalles del cliente: {str(e)}")
+        return None
+    
+

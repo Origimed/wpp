@@ -14,8 +14,9 @@ from modules import (
     actualizar_status,
     agregar_mensaje,
     enviar_mensaje_template,
-    obtener_datos_cliente,
     obtener_detalles_profesional,
+    obtener_detalles_cliente
+
 )
 from reminder import modificar_confirmacion
 from fastapi.middleware.cors import CORSMiddleware
@@ -139,7 +140,7 @@ async def cita(request: Request):
 
             id_cliente = data["client"]
             id_profesional = data["profesional"]
-            data_cliente = obtener_datos_cliente(id_cliente)
+            data_cliente = obtener_detalles_cliente(id_cliente)
             data_profesional = obtener_detalles_profesional(id_profesional)
             phone_number = data_cliente["telefono"]
             nombre = data_cliente["nombre"]
