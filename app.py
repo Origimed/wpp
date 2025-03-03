@@ -135,7 +135,7 @@ async def cita(request: Request):
         try:
             if(request.headers.get("tipo") == "crear"):
                 data = await request.json()
-                logging.info(f"Mensaje recibido {data}")
+                logging.info(f"Mensaje recibido crear {data}")
 
                 id_cliente = data["client"]
                 id_profesional = data["profesional"]
@@ -152,7 +152,7 @@ async def cita(request: Request):
             
             elif(request.headers.get("tipo") == "reagendar"):
                 data = await request.json()
-                logging.info(f"Mensaje recibido {data}")
+                logging.info(f"Mensaje recibido reagendar {data}")
 
                 id_cliente = data["client"]
                 id_profesional = data["profesional"]
@@ -167,7 +167,7 @@ async def cita(request: Request):
 
             elif(request.headers.get("tipo") == "cancelar"):
                 data = await request.json()
-                logging.info(f"Mensaje recibido {data}")
+                logging.info(f"Mensaje recibido cancelar {data}")
 
                 id_cliente = data["client"]
                 id_profesional = data["profesional"]
