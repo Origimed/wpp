@@ -213,7 +213,17 @@ def enviar_mensaje_template(nombre_template,phone_number, nombre, nombre_profesi
     except Exception as e:
         logging.error(f"Error al enviar mensaje template: {str(e)}")
         return False
+
     
+
+
+
+
+
+
+
+
+
 def obtener_datos_cliente(phone_number):
     try:
         response = supabase.table('client').select('id').eq('telefono', phone_number).execute()

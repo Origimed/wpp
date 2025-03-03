@@ -15,7 +15,7 @@ from modules import (
     agregar_mensaje,
     enviar_mensaje_template,
     obtener_detalles_profesional,
-    obtener_detalles_cliente
+    obtener_detalles_cliente,
 
 )
 from reminder import modificar_confirmacion
@@ -126,8 +126,6 @@ async def handle_webhook(request: Request):
 
 
 
-
-
 @app.post("/cita")
 async def cita(request: Request):
     try:
@@ -135,21 +133,53 @@ async def cita(request: Request):
         verify_signature(request, body)
 
         try:
-            data = await request.json()
-            logging.info(f"Mensaje recibido {data}")
+            if(request.headers.get("tipo") == "crear"):
+                data = await request.json()
+                logging.info(f"Mensaje recibido {data}")
 
-            id_cliente = data["client"]
-            id_profesional = data["profesional"]
-            data_cliente = obtener_detalles_cliente(id_cliente)
-            data_profesional = obtener_detalles_profesional(id_profesional)
-            phone_number = data_cliente["telefono"]
-            nombre = data_cliente["nombre"]
-            nombre_profesional = data_profesional["nombre"]
-            fecha = data["date"]
-            hora = data["start_time"]
-            enviar_mensaje_template("creacion_cita",phone_number, nombre, nombre_profesional, fecha, hora)
+                id_cliente = data["client"]
+                id_profesional = data["profesional"]
+                data_cliente = obtener_detalles_cliente(id_cliente)
+                data_profesional = obtener_detalles_profesional(id_profesional)
+                phone_number = data_cliente["telefono"]
+                nombre = data_cliente["nombre"]
+                nombre_profesional = data_profesional["nombre"]
+                fecha = data["date"]
+                hora = data["start_time"]
+                enviar_mensaje_template("creacion_cita",phone_number, nombre, nombre_profesional, fecha, hora)
 
-            return {"status": "success"}
+                return {"status": "success"}
+            
+            elif(request.headers.get("tipo") == "reagendar"):
+                data = await request.json()
+                logging.info(f"Mensaje recibido {data}")
+
+                id_cliente = data["client"]
+                id_profesional = data["profesional"]
+                data_cliente = obtener_detalles_cliente(id_cliente)
+                data_profesional = obtener_detalles_profesional(id_profesional)
+                phone_number = data_cliente["telefono"]
+                nombre = data_cliente["nombre"]
+                nombre_profesional = data_profesional["nombre"]
+                fecha = data["date"]
+                hora = data["start_time"]
+                enviar_mensaje_template("reagendamiento_cita",phone_number, nombre, nombre_profesional, fecha, hora)
+
+            elif(request.headers.get("tipo") == "cancelar"):
+                data = await request.json()
+                logging.info(f"Mensaje recibido {data}")
+
+                id_cliente = data["client"]
+                id_profesional = data["profesional"]
+                data_cliente = obtener_detalles_cliente(id_cliente)
+                data_profesional = obtener_detalles_profesional(id_profesional)
+                phone_number = data_cliente["telefono"]
+                nombre = data_cliente["nombre"]
+                nombre_profesional = data_profesional["nombre"]
+                fecha = data["date"]
+                hora = data["start_time"]
+                enviar_mensaje_template("cancelacion_cita",phone_number, nombre, nombre_profesional, fecha, hora)
+
         except Exception as e:
             logging.error(f"Error al manejar el webhook: {str(e)}")
             return {"status": "error", "message": str(e)}
